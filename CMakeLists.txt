@@ -16,7 +16,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_RELEASE_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost COMPONENTS filesystem program_options) 
+find_package(Boost COMPONENTS filesystem program_options locale regex) 
 
 # Include utility functions
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -34,9 +34,11 @@ target_include_directories(version
 )
 
 # Describe build targets
-add_executable(bayan src/main.cpp)
+add_executable(bayan src/main.cpp src/scan_duplicates.cpp)
 target_link_libraries(bayan PRIVATE
     version
+    Boost::regex
+    Boost::locale
     Boost::filesystem
     Boost::program_options
 )
