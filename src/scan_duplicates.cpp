@@ -92,24 +92,11 @@ ScanDup::ScanDup(const std::vector<fs::path> &directories,
     : dir_list_(directories), exclude_list_(excludes), masks_list_(masks),
       recursive_(recursive), min_size_(min_size), block_size_(block_size) {
 
-    boost::locale::generator gen;
-    std::locale loc = gen("");
-    std::locale::global(loc);
-
-    std::cin.imbue(loc);
-    std::cout.imbue(loc);
-    boost::filesystem::path::imbue(loc);
-
     BOOST_ASSERT_MSG(!directories.empty(), "No paths provided!");
     for (auto &&dir : dir_list_) {
         BOOST_ASSERT_MSG(
             fs::is_directory(dir),
             std::format("{} not a directory!", dir.c_str()).c_str());
-    }
-
-    for (auto &&elem : exclude_list_) {
-        elem = boost::locale::to_lower(boost::locale::normalize(
-            elem.filename().string(), boost::locale::norm_nfc));
     }
 }
 
@@ -127,7 +114,7 @@ ScanDup::result() {
     // Delete not masked files, if mask is presented
     if (masks_list_.size()) {
         for (auto &&mask : masks_list_) {
-            const boost::regex filter(mask);
+            const boost::regex filter(mask, boost::regex::icase);
             auto mask_eraser = [&filter](const fs::path &x) {
                 boost::smatch what;
                 return !boost::regex_match(x.filename().string(), what, filter);
