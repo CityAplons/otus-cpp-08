@@ -12,8 +12,6 @@
 #include <boost/assert.hpp>
 #include <boost/compute/detail/sha1.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/locale/conversion.hpp>
-#include <boost/locale/generator.hpp>
 #include <boost/regex.hpp>
 
 namespace otus {
